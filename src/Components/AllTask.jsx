@@ -6,8 +6,28 @@ export default function SidebarTasks({ comments, nodes = [], filter = '', onClos
     (node.title || '').toLowerCase().includes(filter.toLowerCase())
   );
 
+  if (filteredNodes.length === 0) {
+    return (
+      <div className="fixed top-16 bottom-42 h-full w-96 bg-gray-100 shadow-lg z-50 flex flex-col">
+        <div className="flex justify-between items-center p-6">
+          <h2 className="text-2xl text-center font-bold ml-2">Tarefas dos Funcionários</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-600 hover:text-gray-900 font-bold text-xl"
+            title="Fechar"
+          >
+            x
+          </button>
+        </div>
+        <div className="p-4 text-center text-gray-500">
+          Nenhum funcionário registado.
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="fixed top-16 bottom-42 h-full w-96  bg-gray-100 shadow-lg z-50 flex flex-col duration-1000 delay-500 animate-fadeOut">
+    <div className="fixed top-16 bottom-42 h-full w-96 bg-gray-100 shadow-lg z-50 flex flex-col duration-1000 delay-500 animate-fadeOut">
       <div className="flex justify-between items-center p-6">
         <h2 className="text-2xl text-center font-bold ml-2">Tarefas dos Funcionários</h2>
         <button
@@ -26,7 +46,10 @@ export default function SidebarTasks({ comments, nodes = [], filter = '', onClos
           const feitas = tarefas.filter(t => t.feita);
 
           return (
-            <div key={node.id} className="bg-gray-100 hover:bg-gray-200 rounded-xl shadow p-4 border-2 border-green-500 animate-fadeIn">
+            <div
+              key={node.id}
+              className="bg-gray-100 hover:bg-gray-200 rounded-xl shadow p-4 border-2 border-green-500 animate-fadeIn"
+            >
               <div className="flex items-center gap-2 mb-3 p-1">
                 <img
                   src={node.photoBase64 || defaultImage}
@@ -48,10 +71,15 @@ export default function SidebarTasks({ comments, nodes = [], filter = '', onClos
                 <p>✅ Concluídas: <span className="font-semibold">{feitas.length}</span></p>
               </div>
 
-              <ul className="space-y-2 max-h-48  overflow-y-auto text-sm border border-b-black">
-                {tarefas.length === 0 && <li className="text-gray-400 italic">Nenhuma tarefa cadastrada</li>}
+              <ul className="space-y-2 max-h-48 overflow-y-auto text-sm border border-b-black">
+                {tarefas.length === 0 && (
+                  <li className="text-gray-400 italic">Nenhuma tarefa registada</li>
+                )}
                 {tarefas.map((tarefa, idx) => (
-                  <li key={idx} className="flex justify-between items-center bg-gray-100 rounded p-2 shadow-sm">
+                  <li
+                    key={idx}
+                    className="flex justify-between items-center bg-gray-100 rounded p-2 shadow-sm"
+                  >
                     <span className={tarefa.feita ? "line-through text-gray-400" : "text-gray-800"}>
                       {tarefa.texto}
                     </span>

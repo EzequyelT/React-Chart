@@ -13,6 +13,7 @@ export default function Header({
   setNodeToRemoveAll,
   setTitleForm,
   setAbout,
+  nodes = [],
 }) {
   return (
     <header className="fixed top-0 left-0 right-0 bg-gray-100 shadow z-50 flex flex-wrap items-center justify-between px-4 py-2">
@@ -24,26 +25,29 @@ export default function Header({
         style={{ cursor: 'pointer' }}
         title='RioPele'
       />
-      <div className="flex-1 flex justify-center">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 items-center">
-          <div className="bg-white shadow rounded-xl px-3 py-2 text-center border-t-4 border-green-500">
-            <div className="text-gray-700 text-xs font-semibold">Colaboradores</div>
-            <div className="text-sm font-semibold animate-bounce mt-1">{stats.total}</div>
-          </div>
+      {nodes.length > 0 && (
+        <div className="flex-1 flex justify-center">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 items-center">
+            <div className="bg-white shadow rounded-xl px-3 py-2 text-center border-t-4 border-green-500">
+              <div className="text-gray-700 text-xs font-semibold">Colaboradores</div>
+              <div className="text-sm font-semibold animate-bounce mt-1">{stats.total}</div>
+            </div>
 
-          <div className="bg-white shadow rounded-xl px-3 py-2 text-center border-t-4 border-blue-500">
-            <div className="text-gray-700 text-xs font-semibold">Online / Remoto</div>
-            <div className="text-sm font-semibold animate-bounce mt-1">
-              🟢 {stats.statusCount.online} / 🔵 {stats.statusCount.remoto}
+            <div className="bg-white shadow rounded-xl px-3 py-2 text-center border-t-4 border-blue-500">
+              <div className="text-gray-700 text-xs font-semibold">Online / Remoto</div>
+              <div className="text-sm font-semibold animate-bounce mt-1">
+                🟢 {stats.statusCount.online} / 🔵 {stats.statusCount.remoto}
+              </div>
+            </div>
+
+            <div className="bg-white shadow rounded-xl px-3 py-2 text-center border-t-4 border-gray-400">
+              <div className="text-gray-700 text-xs font-semibold">Offline</div>
+              <div className="text-sm font-semibold animate-bounce mt-1">⚪ {stats.statusCount.offline}</div>
             </div>
           </div>
-
-          <div className="bg-white shadow rounded-xl px-3 py-2 text-center border-t-4 border-gray-400">
-            <div className="text-gray-700 text-xs font-semibold">Offline</div>
-            <div className="text-sm font-semibold animate-bounce mt-1">⚪ {stats.statusCount.offline}</div>
-          </div>
         </div>
-      </div>
+      )}
+
 
       <div className="relative ml-2">
         <button

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { Tree } from 'react-organizational-chart';
-import { fetchNodes} from '../API/node.js';
+import { fetchNodes } from '../API/node.js';
 import { FaSpinner } from "react-icons/fa";
 import { MdCenterFocusStrong, MdFullscreen, MdFullscreenExit, MdAssignment, MdBuild } from 'react-icons/md';
 
@@ -196,7 +196,7 @@ export default function Chart() {
 
   return (
     <>
-       <Header
+      <Header
         stats={stats}
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
@@ -205,6 +205,7 @@ export default function Chart() {
         setNodeToRemoveAll={setNodeToRemoveAll}
         setTitleForm={setTitleForm}
         setAbout={setAbout}
+        nodes={nodes}
       />
 
       {nodeToRemoveAll && (
@@ -288,26 +289,32 @@ export default function Chart() {
         </div>
       )}
 
-      < div className="fixed inset-0 flex justify-center items-start pt-[200px] overflow-hidden" >
-        <div
-          id="org-tree"
-          className="m- p-10 bg-white rounded-lg cursor-move"
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseLeave}
-          style={{
-            transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
-            transformOrigin: 'center center',
-            userSelect: 'none',
-            width: 'max-content',
-            height: 'max-content',
-            cursor: dragging.current ? 'grabbing' : 'grab'
-          }}
-        >
-          {treeData.length === 0 ? (
-            <p className="text-center text-gray-500">Nenhum nó cadastrado ainda.</p>
-          ) : (
+      <div className="fixed inset-0 flex justify-center items-start pt-[200px] overflow-hidden">
+        {treeData.length === 0 ? (
+          <div className='text-center p-1'>
+            <p className="font-semibold text-xl text-gray-700 animate-pulse">Nenhum nó cadastrado ainda.</p>
+            <div className='flex gap-4 mt-10'>
+              <button onClick={() => setShowForm(true)} className=" font-semibold rounded-xl bg-green-600 text-white p-3 hover:bg-green-700">Clique aqui para adicionar um</button>
+              <button onClick={() => setAbout(true)} className=" font-semibold rounded-xl bg-green-600 text-white p-3 hover:bg-green-700">Mais Informação</button>
+            </div>
+          </div>
+        ) : (
+          <div
+            id="org-tree"
+            className="m- p-10 bg-white rounded-lg cursor-move"
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
+            style={{
+              transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
+              transformOrigin: 'center center',
+              userSelect: 'none',
+              width: 'max-content',
+              height: 'max-content',
+              cursor: dragging.current ? 'grabbing' : 'grab'
+            }}
+          >
             <Tree
               lineWidth={'9px'}
               lineColor={'#4ade80'}
@@ -326,9 +333,10 @@ export default function Chart() {
                 exportMode, collapsedNodes, toggleCollapse,
                 selectedNode, setSelectedNode, nodeMenuOpen, setNodeMenuOpen, statusMap)}
             </Tree>
-          )}
-        </div>
-      </div >
+          </div>
+        )}
+      </div>
+
 
       {
         showForm && (
@@ -513,13 +521,13 @@ export default function Chart() {
                   />
                 </div>
 
-               
+
                 <div>
                   <p className="text-lg text-green-600">Nome</p>
                   <p className="text-base font-semibold ml-4">{selectedNode.name}</p>
                 </div>
 
-                
+
                 <div>
                   <p className="text-lg text-green-600">Superior</p>
                   <p className="text-base font-semibold ml-4">{superiorName}</p>
@@ -534,7 +542,7 @@ export default function Chart() {
                   <p className="text-lg text-green-600 mb-1">Status</p>
                   <div className='flex row-auto space-x-48'>
                     <div className="flex items-center gap-2 bg-stone-300 border border-gray-200 px-3 py-2 rounded-lg shadow-sm w-fit ml-2">
-                       <StatusBadge status={status} />
+                      <StatusBadge status={status} />
                     </div>
                     <button onClick={() => {
                       console.log('Selecionado:', nodes.id);
@@ -618,57 +626,59 @@ export default function Chart() {
         )
       }
 
-      <div className="fixed bottom-4 left-7 z-50">
-        {!showMiniMap && (
-          <button
-            onClick={() => {
-              generateMiniMap(); 
-              setShowMiniMap(true);
-            }}
-            className="bg-green-600 text-white text-sm py-2 px-4 rounded-xl shadow hover:bg-green-700 transition"
-          >
-            Gerar Mini Mapa
-          </button>
-        )}
+      {nodes.length > 0 && (
+        <div className="fixed bottom-4 left-7 z-50">
+          {!showMiniMap && (
+            <button
+              onClick={() => {
+                generateMiniMap();
+                setShowMiniMap(true);
+              }}
+              className="bg-green-600 text-white text-sm py-2 px-4 rounded-xl shadow hover:bg-green-700 transition"
+            >
+              Gerar Mini Mapa
+            </button>
+          )}
 
-        {showMiniMap && (
-          <div className="border border-green-500 bg-white shadow-lg p-3 rounded-lg transition-all duration-300">
+          {showMiniMap && (
+            <div className="border border-green-500 bg-white shadow-lg p-3 rounded-lg transition-all duration-300">
+              {miniMapImage && (
+                <img
+                  src={miniMapImage}
+                  alt="Mini mapa do organograma"
+                  className="w-44 h-auto object-contain cursor-pointer transition-transform duration-300 hover:scale-105"
+                  onClick={() => {
+                    setTranslate({ x: 0, y: 0 });
+                    setScale(1);
+                  }}
+                />
+              )}
 
-            {miniMapImage && (
-              <img
-                src={miniMapImage}
-                alt="Mini mapa do organograma"
-                className="w-44 h-auto object-contain cursor-pointer transition-transform duration-300 hover:scale-105"
-                onClick={() => {
-                  setTranslate({ x: 0, y: 0 });
-                  setScale(1);
-                }}
-              />
-            )}
+              <div className="mt-2 flex justify-between gap-2">
+                <button
+                  onClick={generateMiniMap}
+                  className="flex-1 bg-green-600 text-white text-xs py-1 px-2 rounded-lg hover:bg-green-700 flex items-center justify-center gap-1"
+                  disabled={loadingMiniMap}
+                >
+                  {loadingMiniMap ? (
+                    <FaSpinner className="animate-spin text-white" />
+                  ) : (
+                    'Atualizar'
+                  )}
+                </button>
 
-            <div className="mt-2 flex justify-between gap-2">
-              <button
-                onClick={generateMiniMap}
-                className="flex-1 bg-green-600 text-white text-xs py-1 px-2 rounded-lg hover:bg-green-700 flex items-center justify-center gap-1"
-                disabled={loadingMiniMap}
-              >
-                {loadingMiniMap ? (
-                  <FaSpinner className="animate-spin text-white" />
-                ) : (
-                  'Atualizar'
-                )}
-              </button>
-
-              <button
-                onClick={() => setShowMiniMap(false)}
-                className="flex-1 bg-red-500 text-white text-xs py-1 px-2 rounded-lg hover:bg-red-600"
-              >
-                Fechar
-              </button>
+                <button
+                  onClick={() => setShowMiniMap(false)}
+                  className="flex-1 bg-red-500 text-white text-xs py-1 px-2 rounded-lg hover:bg-red-600"
+                >
+                  Fechar
+                </button>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
+
       {
         showTaskPanel && selectedNode && (
           <div className="fixed top-28 bottom-28 right-0 w-96 max-w-full bg-white shadow-2xl border-l border-gray-200 p-6 z-50 overflow-y-auto rounded-lg animate-fadeIn animate-fadeOut">

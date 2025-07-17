@@ -1,27 +1,29 @@
-Full-stack project using **React** on the frontend with an interactive organizational chart, and **Node.js** on the backend.
+React Chart is a full-stack project using React on the frontend with an interactive organizational chart styled with Tailwind CSS, and Node.js on the backend. The project also uses html2canvas and jspdf to export parts of the UI as images or PDFs.
 
----
-How to execute the project
----
-1-Clone the Repository
+How to execute the project:
+
+Clone the repository:
 git clone https://github.com/EzequyelT/React-Chart.git
 cd React-Chart
----
-2-Install frontend dependencies
+
+Install frontend dependencies:
 npm install
----
-3-Start the frontend
+
+Start the frontend:
 npm run dev
----
-4-Navigate to the Backend Folder
+
+Navigate to the backend folder:
 cd backend
----
-5-Install Backend Dependencies
+
+Install backend dependencies:
 npm install
----
-6-Start Backend
+
+Start the backend:
 npm start
----
 
+Note: All required packages (like Tailwind CSS, html2canvas, and jspdf) will be installed automatically when running npm install.
 
+Technologies used:
+Frontend: React, Vite, Tailwind CSS, html2canvas, jspdf, react-icons, react-organizational-chart
+Backend: Node.js
 
